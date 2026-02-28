@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로또대박 - 1등 당첨 번호 추천</title>
+  <meta name="theme-color" content="#FFD700">
+  <meta name="description" content="AI 분석 기반 행운의 번호 추천! 1등 당첨의 확률을 높여보세요">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #B71C1C 0%, #D32F2F 50%, #FFD700 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 12px 48px rgba(183, 28, 28, 0.25);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      border: 3px solid #FFD700;
+    }
+    .logo {
+      font-size: 48px;
+      margin-bottom: 4px;
+    }
+    h1 { 
+      color: #B71C1C; 
+      margin-bottom: 4px; 
+      font-size: 26px; 
+      font-weight: 700;
+      background: linear-gradient(90deg, #B71C1C, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: #666; margin-bottom: 16px; font-size: 13px; }
+    .badge {
+      display: inline-block;
+      background: #FFD700;
+      color: #B71C1C;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .numbers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .number-set {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+    .ball {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #D32F2F, #B71C1C);
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 3px 10px rgba(183, 28, 28, 0.4);
+      animation: popIn 0.3s ease-out;
+      border: 2px solid #FFD700;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .btn {
+      background: linear-gradient(90deg, #D32F2F, #B71C1C);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 17px;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(183, 28, 28, 0.4);
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(183, 28, 28, 0.5); }
+    .btn:active { transform: translateY(0); }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn-secondary {
+      background: #fff;
+      color: #B71C1C;
+      border: 2px solid #B71C1C;
+      flex: 1;
+      padding: 12px;
+      box-shadow: none;
+    }
+    .btn-secondary:hover { background: #FFEBEE; }
+    .btn-share {
+      background: #FFD700;
+      color: #B71C1C;
+      flex: 1;
+      padding: 12px;
+      box-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
+    }
+    .btn-share:hover { background: #FFC107; }
+    .ad-banner {
+      margin-top: 20px;
+      min-height: 50px;
+      background: #FFF8E1;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      color: #999;
+    }
+    .ad-banner ins {
+      width: 100%;
+      min-height: 50px;
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">💰</div>
+    <h1>로또대박</h1>
+    <div class="badge">🚀 1등 당첨 번호 추천</div>
+    <p class="subtitle">AI 분석 기반 행운의 번호를 확인하세요!</p>
+    <div class="numbers" id="numbers"></div>
+    <button class="btn" onclick="generateNumbers()">🔥 새로운 번호 받기</button>
+    <div class="btn-group">
+      <button class="btn btn-share" onclick="shareNumbers()">📤 공유하기</button>
+      <button class="btn btn-secondary" onclick="saveNumbers()">💾 저장하기</button>
+    </div>
+    
+    <div class="ad-banner">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <script>
+    function generateNumbers() {
+      const container = document.getElementById('numbers');
+      container.innerHTML = '';
+      
+      for (let setIndex = 0; setIndex < 5; setIndex++) {
+        const nums = new Set();
+        while (nums.size < 5) {
+          nums.add(Math.floor(Math.random() * 45) + 1);
+        }
+        const sorted = [...nums].sort((a, b) => a - b);
+        
+        const setDiv = document.createElement('div');
+        setDiv.className = 'number-set';
+        
+        sorted.forEach((num, i) => {
+          const ball = document.createElement('div');
+          ball.className = 'ball';
+          ball.textContent = num;
+          ball.style.animationDelay = `${(setIndex * 5 + i) * 0.05}s`;
+          setDiv.appendChild(ball);
+        });
+        
+        container.appendChild(setDiv);
+      }
+    }
+
+    function saveNumbers() {
+      const sets = document.querySelectorAll('.number-set');
+      if (sets.length === 0) {
+        alert('먼저 번호를 추천받아주세요!');
+        return;
+      }
+      let allNumbers = [];
+      sets.forEach((set, index) => {
+        const nums = [...set.querySelectorAll('.ball')].map(b => b.textContent);
+        allNumbers.push(`${index + 1}세트: ${nums.join(', ')}`);
+      });
+      
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText('로또대박 💰\n' + allNumbers.join('\n'));
+        alert('번호가 복사되었습니다! Pasteして粘贴');
+      } else {
+        alert(allNumbers.join('\n'));
+      }
+    }
+
+    function shareNumbers() {
+      const sets = document.querySelectorAll('.number-set');
+      if (sets.length === 0) {
+        alert('먼저 번호를 추천받아주세요!');
+        return;
+      }
+      let allNumbers = [];
+      sets.forEach((set, index) => {
+        const nums = [...set.querySelectorAll('.ball')].map(b => b.textContent);
+        allNumbers.push(`${index + 1}세트: ${nums.join(', ')}`);
+      });
+      
+      const text = '로또대박 💰\n1등 당첨 번호 추천!\n\n' + allNumbers.join('\n') + '\n\n🎯 로또대박에서 받았습니다!';
+      
+      if (navigator.share) {
+        navigator.share({
+          title: '로또대박 - 행운의 번호',
+          text: text
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+        alert('번호가 복사되었습니다!');
+      } else {
+        alert(text);
+      }
+    }
+
+    generateNumbers();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</body>
+</html>
