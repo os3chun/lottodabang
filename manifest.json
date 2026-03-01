@@ -1,7 +1,7 @@
 {
   "name": "로또대박 - 1등 당첨 번호 추천",
   "short_name": "로또대박",
-  "start_url": "https://os3chun.github.io/lottodabang/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#B71C1C",
   "theme_color": "#FFD700",
